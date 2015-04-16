@@ -7,13 +7,12 @@ import java.io.Reader;
 
 public class InputFile {
 	
-	private File input;
+	protected BufferedReader br;
 	
 	public InputFile(String path){
 		
 		super();
-		readFile(path);
-		
+		br = readFile(path);
 		
 	}
 	
@@ -22,7 +21,6 @@ public class InputFile {
 		File input = new File(path);
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(input));
-			System.out.println("success!");
 			return br;
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found");
@@ -30,6 +28,7 @@ public class InputFile {
 		}
 		
 	}
+	
 	
 	
 }
