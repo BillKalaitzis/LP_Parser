@@ -33,6 +33,8 @@ public class LP_Converter {
 		
 		if(index == 0){
 			detect_minmax(str);
+			getMultipliers(str,0);
+			checkForSymbols(str);
 			}
 			
 		else if(index == 1){
@@ -63,6 +65,45 @@ public class LP_Converter {
 		}	
 	}
 	
+	public void getMultipliers(String str,int signal){
+		
+		ArrayList<Integer>indexes = new ArrayList<Integer>();
+		ArrayList<Integer>d = new ArrayList<Integer>();
+		
+		String tmp = str.substring(3, str.length());
+		tmp = tmp.replaceAll("\\s", "");
+		
+		int index = 0;
+		while(index < tmp.length()){
+			if(tmp.charAt(index) == 'x')
+				indexes.add(index);
+			index++;
+		}
+		
+		for(int i=0;i<indexes.size();i++){
+			if(i==0)
+				d.add(Integer.parseInt(tmp.substring(0, indexes.get(0))));
+			else
+				d.add(Integer.parseInt(tmp.substring(indexes.get(i-1)+2, indexes.get(i))));
+		}
+		
+		if(signal == 0){
+			c = new ArrayList<Integer>(d);
+		}
+		
+		//more signal codes to be added
+		
+	}
+	
+	public void checkForSymbols(String str){
+		
+		if(str.substring(3, str.length()).contains("<") ||
+		   str.substring(3, str.length()).contains(">")	||
+		   str.substring(3, str.length()).contains("=")){
+			System.out.println("Your objective function contains forbidden characters (<,>,=)");
+			return;
+		}
+	}
 	
 
 }
