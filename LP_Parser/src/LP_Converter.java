@@ -7,7 +7,7 @@ public class LP_Converter {
 	
 	private InputFile input;
 	private ArrayList<ArrayList<Integer>> A = new ArrayList<ArrayList<Integer>>();
-	private ArrayList<ArrayList<Integer>> b = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<Integer> b = new ArrayList<Integer>();
 	private ArrayList<Integer> c;
 	private ArrayList<Integer> Eqin;
 	private int minmax;
@@ -44,11 +44,13 @@ public class LP_Converter {
 		else if(index == 1){
 			detect_st(str);	
 			getMultipliers(str,index);
+			getRHS(str,index);
 			
 		}
 		
 		else if(index > 1){
 			getMultipliers(str,index);
+			getRHS(str,index);
 		}
 		
 		
@@ -128,6 +130,27 @@ public class LP_Converter {
 			System.out.println("Your objective function contains forbidden characters (<,>,=)");
 			return;
 		}
+	}
+	
+	public void getRHS(String str, int index){
+		
+		int ptr=0;
+		int rhs;
+		
+		if(index == 1)
+			str = str.substring(3, str.length());
+		str = str.replaceAll("\\s", "");
+		
+		if(str.contains("<") || str.contains(">") || str.contains("=")){
+			for(int i=0; i < str.length(); i++){
+				if(str.charAt(i) == '=')
+					ptr =  i;
+				
+			}
+			System.out.println(str);
+			rhs = Integer.parseInt(str.substring(ptr+1, str.length()));
+			b.add(rhs);
+		}	
 	}
 	
 
