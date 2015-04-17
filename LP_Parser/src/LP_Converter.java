@@ -29,6 +29,7 @@ public class LP_Converter {
 				break;
 			stringParser(currStr,index);
 			index++;
+			
 		}
 		
 	}
@@ -100,9 +101,11 @@ public class LP_Converter {
 				
 		for(int i=0;i<indexes.size();i++){
 			if(i==0)
-			d.add(Integer.parseInt(tmp.substring(0, indexes.get(0))));
-			else
+				d.add(Integer.parseInt(tmp.substring(0, indexes.get(0))));
+			else {//BUG
 				d.add(Integer.parseInt(tmp.substring(indexes.get(i-1)+2, indexes.get(i))));
+				
+			}
 		}
 		
 		if(signal == 0){
@@ -136,6 +139,8 @@ public class LP_Converter {
 		
 		int ptr=0;
 		int rhs;
+		int counter = 0; 
+		String tmp;
 		
 		if(index == 1)
 			str = str.substring(3, str.length());
@@ -143,15 +148,23 @@ public class LP_Converter {
 		
 		if(str.contains("<") || str.contains(">") || str.contains("=")){
 			for(int i=0; i < str.length(); i++){
-				if(str.charAt(i) == '=')
+				if(str.charAt(i) == '='){
+					counter++;
 					ptr =  i;
-				
+				}
+				if(counter > 1){
+					System.out.println("Your LP containes more than 1 equals signs");
+					return;
+				}
 			}
-			System.out.println(str);
-			rhs = Integer.parseInt(str.substring(ptr+1, str.length()));
-			b.add(rhs);
-		}	
+			tmp = str.substring(ptr+1, str.length());	
+			b.add(Integer.parseInt(tmp));
+		}
+		
+		else
+			System.out.println("Your LP doesn't contain a right half side");
 	}
+	
 	
 
 }
