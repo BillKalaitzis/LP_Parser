@@ -1,3 +1,4 @@
+import java.awt.List;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -5,8 +6,8 @@ import java.util.ArrayList;
 public class LP_Converter {
 	
 	private InputFile input;
-	private ArrayList<Integer> A;
-	private ArrayList<Integer> b;
+	private ArrayList<ArrayList<Integer>> A = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<ArrayList<Integer>> b = new ArrayList<ArrayList<Integer>>();
 	private ArrayList<Integer> c;
 	private ArrayList<Integer> Eqin;
 	private int minmax;
@@ -22,7 +23,10 @@ public class LP_Converter {
 		
 		String currStr;
 		int index = 0;
-		while((currStr = input.br.readLine())!= null){
+		while(true){
+			currStr = input.br.readLine();
+			if(currStr.replaceAll("\\s", "").equals("end"))
+				break;
 			stringParser(currStr,index);
 			index++;
 		}
@@ -33,12 +37,18 @@ public class LP_Converter {
 		
 		if(index == 0){
 			detect_minmax(str);
-			getMultipliers(str,0);
+			getMultipliers(str,index);
 			checkForSymbols(str);
 			}
 			
 		else if(index == 1){
 			detect_st(str);	
+			getMultipliers(str,index);
+			
+		}
+		
+		else if(index > 1){
+			getMultipliers(str,index);
 		}
 		
 		
@@ -70,7 +80,13 @@ public class LP_Converter {
 		ArrayList<Integer>indexes = new ArrayList<Integer>();
 		ArrayList<Integer>d = new ArrayList<Integer>();
 		
-		String tmp = str.substring(3, str.length());
+		String tmp ;
+		
+		if(signal == 0 || signal == 1)
+			tmp= str.substring(3, str.length());
+		
+		else
+			tmp = str;
 		tmp = tmp.replaceAll("\\s", "");
 		
 		int index = 0;
@@ -79,10 +95,10 @@ public class LP_Converter {
 				indexes.add(index);
 			index++;
 		}
-		
+				
 		for(int i=0;i<indexes.size();i++){
 			if(i==0)
-				d.add(Integer.parseInt(tmp.substring(0, indexes.get(0))));
+			d.add(Integer.parseInt(tmp.substring(0, indexes.get(0))));
 			else
 				d.add(Integer.parseInt(tmp.substring(indexes.get(i-1)+2, indexes.get(i))));
 		}
@@ -91,7 +107,16 @@ public class LP_Converter {
 			c = new ArrayList<Integer>(d);
 		}
 		
-		//more signal codes to be added
+		else if(signal == 1){
+			A.add(new ArrayList<Integer>());
+			A.get(signal-1).addAll(d);
+		}
+		
+		else if(signal > 1 ){
+			A.add(new ArrayList<Integer>());
+			A.get(signal-1).addAll(d);	
+		}
+		
 		
 	}
 	
