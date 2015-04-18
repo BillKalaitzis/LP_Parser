@@ -191,7 +191,7 @@ public class LP_Converter {
 	}
 	
 	public void save(){
-		OutputFile output = new OutputFile(A,b,c,Eqin);
+		OutputFile output = new OutputFile(A,b,c,Eqin,minmax);
 	}
 	
 

@@ -9,15 +9,15 @@ public class OutputFile {
 
 	protected BufferedWriter bw;
 	
-	public OutputFile(ArrayList<ArrayList<Integer>> A, ArrayList<Integer> b, ArrayList<Integer> c,ArrayList<Integer> Eqin){
+	public OutputFile(ArrayList<ArrayList<Integer>> A, ArrayList<Integer> b, ArrayList<Integer> c,ArrayList<Integer> Eqin,int minmax){
 		
 		super();
-		writeFile(A,b,c,Eqin);
+		writeFile(A,b,c,Eqin,minmax);
 		System.out.println("Data successfully saved on file");
 		
 	}
 	
-	public void writeFile(ArrayList<ArrayList<Integer>> A, ArrayList<Integer> b, ArrayList<Integer> c,ArrayList<Integer> Eqin){
+	public void writeFile(ArrayList<ArrayList<Integer>> A, ArrayList<Integer> b, ArrayList<Integer> c,ArrayList<Integer> Eqin,int minmax){
 		
 		File output = new File("Data/output.txt");
 		try {
@@ -27,6 +27,7 @@ public class OutputFile {
 		}
 		
 		try {
+			bw.write("minmax = " + minmax + "\n\n");
 			bw.write("A = " );
 			int counter = 0;
 			for(ArrayList<Integer> i:A){
