@@ -9,7 +9,7 @@ public class LP_Converter {
 	private ArrayList<ArrayList<Integer>> A = new ArrayList<ArrayList<Integer>>();
 	private ArrayList<Integer> b = new ArrayList<Integer>();
 	private ArrayList<Integer> c;
-	private ArrayList<Integer> Eqin;
+	private ArrayList<Integer> Eqin = new ArrayList<Integer>();
 	private int minmax;
 	
 	
@@ -17,6 +17,8 @@ public class LP_Converter {
 		
 		input = new InputFile(path);
 		convert();
+		System.out.println("A: " + A + "\nb: " + b + "\nc: " + c + "\nEqin: " + Eqin);
+		save();
 	}
 	
 	public void convert() throws IOException{
@@ -46,12 +48,14 @@ public class LP_Converter {
 			detect_st(str);	
 			getMultipliers(str,index);
 			getRHS(str,index);
+			getEqin(str,index);
 			
 		}
 		
 		else if(index > 1){
 			getMultipliers(str,index);
 			getRHS(str,index);
+			getEqin(str,index);
 		}
 		
 		
@@ -161,10 +165,34 @@ public class LP_Converter {
 			b.add(Integer.parseInt(tmp));
 		}
 		
-		else
+		else{
 			System.out.println("Your LP doesn't contain a right half side");
+			return;
+			}
 	}
 	
+	
+	public void getEqin(String str, int index){
+		
+		String tmp = str;
+		
+		if(index == 1)
+			tmp = tmp.substring(3, str.length());
+		
+		if(tmp.contains("<"))
+			Eqin.add(-1);
+		else if(tmp.contains(">"))
+			Eqin.add(1);
+		else if(tmp.contains("="))
+			Eqin.add(0);
+		else //This error will be captured by the getRHS method
+			return;
+		
+	}
+	
+	public void save(){
+		OutputFile output = new OutputFile(A,b,c,Eqin);
+	}
 	
 
 }
