@@ -17,7 +17,7 @@ public class LP_Converter {
 		
 		input = new InputFile(path);
 		convert();
-		System.out.println("A: " + A + "\nb: " + b + "\nc: " + c + "\nEqin: " + Eqin);
+		System.out.println("Minmax: "+ minmax + "\nA: " + A + "\nb: " + b + "\nc: " + c + "\nEqin: " + Eqin);
 		save();
 	}
 	
@@ -27,9 +27,21 @@ public class LP_Converter {
 		int index = 0;
 		while(true){
 			currStr = input.br.readLine();
-			if(currStr.replaceAll("\\s", "").equals("end"))
-				break;
-			stringParser(currStr,index);
+
+			if(currStr.trim().equals("")){
+				System.out.println("Please dont leave empty lines");
+				System.exit(1);
+			}
+			else{
+				try{
+					if(currStr.replaceAll("\\s", "").equals("end"))
+						break;
+				}catch(NullPointerException npe){
+					System.out.println("Keyword 'end' not detected");
+					System.exit(1);
+				}
+				stringParser(currStr,index);
+				}
 			index++;
 			
 		}
@@ -69,7 +81,7 @@ public class LP_Converter {
 			minmax = 1;
 		else{
 			System.out.println("Please specify the type of the linear problem");
-			return;
+			System.exit(1);
 		}
 	}
 	
@@ -78,7 +90,7 @@ public class LP_Converter {
 		if(!str.substring(0,3).toLowerCase().equals("s.t")){
 			System.out.println("No constraints have been detected, "
 							 + "make sure to enter the keyword <S.T> before your constraints" );
-			return;
+			System.exit(1);
 		}	
 	}
 	
@@ -91,7 +103,6 @@ public class LP_Converter {
 		
 		if(signal == 0 || signal == 1)
 			tmp= str.substring(3, str.length());
-		
 		else
 			tmp = str;
 		tmp = tmp.replaceAll("\\s", "");
@@ -102,15 +113,20 @@ public class LP_Converter {
 				indexes.add(index);
 			index++;
 		}
+		
+		if(signal > 1) {
+			checkNumOfVars(indexes.size(),tmp);
+		}
+		
 				
 		for(int i=0;i<indexes.size();i++){
 			if(i==0)
 				d.add(Integer.parseInt(tmp.substring(0, indexes.get(0))));
-			else {//BUG
+			else {
 				try{
 				d.add(Integer.parseInt(tmp.substring(indexes.get(i-1)+2, indexes.get(i))));
 				}catch(NumberFormatException nfe){
-					System.out.println("The right half side of your constrains contains restricted characters");
+					System.out.println("The right half side of your constraints contains restricted characters");
 					System.exit(1);
 				}
 				
@@ -163,21 +179,21 @@ public class LP_Converter {
 				}
 				if(counter > 1){
 					System.out.println("Your LP containes more than 1 equals signs");
-					return;
+					System.exit(1);
 				}
 			}
 			tmp = str.substring(ptr+1, str.length());	
 			try{
 			b.add(Integer.parseInt(tmp));
 			}catch(NumberFormatException nfe){
-				System.out.println("The right half side of your constraints contains restricted characters");
+				System.out.println("The right half side of your constraints contains restricted characters\nOR doesn't contain any numbers at all");
 				System.exit(1);
 			}
 		}
 		
 		else{
-			System.out.println("Your LP doesn't contain a right half side");
-			return;
+			System.out.println("One of your constaints doesn't contain a right half side");
+			System.exit(1);
 			}
 	}
 	
@@ -204,5 +220,13 @@ public class LP_Converter {
 		OutputFile output = new OutputFile(A,b,c,Eqin,minmax);
 	}
 	
+	public void checkNumOfVars(int size, String tmp){
+		if(size > c.size() && tmp.lastIndexOf('x') < tmp.indexOf('=')){
+			System.out.println("Your constraints contain more variables than your objective function");
+			System.exit(1);
+		}
+		
+		
+	}
 
 }
