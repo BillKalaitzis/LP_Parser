@@ -107,7 +107,12 @@ public class LP_Converter {
 			if(i==0)
 				d.add(Integer.parseInt(tmp.substring(0, indexes.get(0))));
 			else {//BUG
+				try{
 				d.add(Integer.parseInt(tmp.substring(indexes.get(i-1)+2, indexes.get(i))));
+				}catch(NumberFormatException nfe){
+					System.out.println("The right half side of your constrains contains restricted characters");
+					System.exit(1);
+				}
 				
 			}
 		}
@@ -134,8 +139,8 @@ public class LP_Converter {
 		if(str.substring(3, str.length()).contains("<") ||
 		   str.substring(3, str.length()).contains(">")	||
 		   str.substring(3, str.length()).contains("=")){
-			System.out.println("Your objective function contains forbidden characters (<,>,=)");
-			return;
+			System.out.println("Your objective function contains restricted characters (<,>,=)");
+			System.exit(1);
 		}
 	}
 	
@@ -162,7 +167,12 @@ public class LP_Converter {
 				}
 			}
 			tmp = str.substring(ptr+1, str.length());	
+			try{
 			b.add(Integer.parseInt(tmp));
+			}catch(NumberFormatException nfe){
+				System.out.println("The right half side of your constraints contains restricted characters");
+				System.exit(1);
+			}
 		}
 		
 		else{
